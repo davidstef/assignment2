@@ -1,0 +1,29 @@
+<html>
+<head>
+</head>
+
+<body>
+
+
+      
+      <ul>
+    {{#users}}
+    <li>
+            <p><small>{{first_name}} {{last_name}}</small></p>
+            <p><small>{{email}}</small></p>
+            <h3>{{title}}<h3>
+            <p>{{post}}</p>
+  
+    </li>
+    <hr/>
+    {{/users}}
+
+    {{^users}}
+    <h2>404 not found!</h2>
+    {{/users}}
+
+    </ul>
+
+</body>
+
+</html>
