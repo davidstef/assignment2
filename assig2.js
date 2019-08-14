@@ -1,37 +1,25 @@
-const express = require('express')
-const app = express()
-const mustacheExpress = require("mustache-express")
 const PORT = 8080
+const retUsers = require('./utils/utils')
+const ServerHTML = require('./utils/server')
+const app = ServerHTML() 
+const users = retUsers('./data/posts.csv')
 
-
-
-const fs = require('fs')
-const data = fs.readFileSync("posts.csv", { encoding: "utf8" });
-const details = data.split("\r\n");
-const info = details[0].split(",");
-var users = [];
-var i = 0;
-
-console.log(info)
-
-for (i = 1; i < details.length; i++) {
-    var aux = details[i].split(",");
-    var user = {};
-
-    for (var j = 0; j < info.length; j++) {
-        user[info[j]] = aux[j];
-    }
-    users.push(user);
-}
-
-app.engine('mustache', mustacheExpress())
-app.set('views', './views')
-app.set('view engine', 'mustache')
 app.get('/blog', (req, res) => {
     res.render('users', { users: users })
+})
+
+app.get('/blog/:id', (req, res) => {
+    var ID = req.url.split("/")[2];
+    const user = users.find (function(user){
+        return user.id == ID
+    })
+    res.render('specific-user', { users: user })
+})
+
+app.get('/', (req, res) => {
+    res.redirect('/blog')
 })
 
 app.listen(PORT, (req, res) => {
     console.log("Server is running on..." + PORT)
 })
-
